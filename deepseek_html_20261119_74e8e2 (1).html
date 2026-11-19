@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HUTAN DIGITAL — Ecotherapy VR</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========== SPLASH / ONBOARDING ========== -->
+  <section id="screen-onboarding" class="screen active">
+    <div class="onboarding-container">
+      <div class="logo">
+        <div class="logo-icon">🌳</div>
+        <h1>HUTAN DIGITAL</h1>
+        <p class="tagline">Ecotherapy Berbasis Biophilic VR & Affective Computing</p>
+      </div>
+
+      <div class="onboarding-steps">
+        <div class="step active" data-step="1">
+          <span class="step-num">1</span>
+          <span>Registrasi</span>
+        </div>
+        <div class="step" data-step="2">
+          <span class="step-num">2</span>
+          <span>Kuesioner</span>
+        </div>
+        <div class="step" data-step="3">
+          <span class="step-num">3</span>
+          <span>Kalibrasi</span>
+        </div>
+      </div>
+
+      <!-- Step 1: Registrasi -->
+      <div class="step-content active" id="step-1">
+        <h2>Selamat Datang</h2>
+        <p>Isi data dirimu untuk memulai perjalanan merawat jiwa bersama hutan.</p>
+        <input type="text" id="input-nama" placeholder="Nama panggilan" />
+        <input type="number" id="input-usia" placeholder="Usia (15–24)" min="15" max="24" />
+        <select id="input-gender">
+          <option value="">Pilih jenis kelamin</option>
+          <option value="L">Laki-laki</option>
+          <option value="P">Perempuan</option>
+        </select>
+        <button class="btn-primary" onclick="nextStep(2)">Lanjut →</button>
+      </div>
+
+      <!-- Step 2: Kuesioner -->
+      <div class="step-content" id="step-2">
+        <h2>Kuesioner Singkat</h2>
+        <p>Dalam 2 minggu terakhir, seberapa sering kamu merasakan:</p>
+        <div class="question">
+          <label>1. Merasa cemas tanpa alasan jelas?</label>
+          <div class="likert">
+            <button onclick="selectLikert(this, 1)">Tidak pernah</button>
+            <button onclick="selectLikert(this, 2)">Jarang</button>
+            <button onclick="selectLikert(this, 3)">Kadang</button>
+            <button onclick="selectLikert(this, 4)">Sering</button>
+            <button onclick="selectLikert(this, 5)">Selalu</button>
+          </div>
+        </div>
+        <div class="question">
+          <label>2. Sulit berkonsentrasi?</label>
+          <div class="likert">
+            <button onclick="selectLikert(this, 1)">Tidak pernah</button>
+            <button onclick="selectLikert(this, 2)">Jarang</button>
+            <button onclick="selectLikert(this, 3)">Kadang</button>
+            <button onclick="selectLikert(this, 4)">Sering</button>
+            <button onclick="selectLikert(this, 5)">Selalu</button>
+          </div>
+        </div>
+        <div class="question">
+          <label>3. Merasa lelah meski sudah istirahat?</label>
+          <div class="likert">
+            <button onclick="selectLikert(this, 1)">Tidak pernah</button>
+            <button onclick="selectLikert(this, 2)">Jarang</button>
+            <button onclick="selectLikert(this, 3)">Kadang</button>
+            <button onclick="selectLikert(this, 4)">Sering</button>
+            <button onclick="selectLikert(this, 5)">Selalu</button>
+          </div>
+        </div>
+        <button class="btn-primary" onclick="nextStep(3)">Lanjut →</button>
+      </div>
+
+      <!-- Step 3: Kalibrasi -->
+      <div class="step-content" id="step-3">
+        <h2>Kalibrasi Sensor</h2>
+        <p>Letakkan sensor detak jantung di pergelangan tangan dan sensor GSR di ujung jari.</p>
+        <div class="sensor-preview">
+          <div class="sensor-icon">❤️</div>
+          <div class="sensor-status" id="sensor-status">Menunggu sensor...</div>
+        </div>
+        <button class="btn-primary" onclick="startApp()">Mulai Aplikasi →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DASHBOARD ========== -->
+  <section id="screen-dashboard" class="screen">
+    <header class="app-header">
+      <div class="header-left">
+        <span class="logo-small">🌳</span>
+        <span>HUTAN DIGITAL</span>
+      </div>
+      <div class="header-right">
+        <span id="greeting-name">Halo!</span>
+        <div class="avatar">👤</div>
+      </div>
+    </header>
+
+    <main class="dashboard-main">
+      <!-- Status Afektif -->
+      <div class="card status-card">
+        <h3>Status Afektif Hari Ini</h3>
+        <div class="affective-status">
+          <div class="status-dot tenang active"></div>
+          <span>Tenang</span>
+          <div class="status-dot cemas"></div>
+          <span>Cemas</span>
+          <div class="status-dot lelah"></div>
+          <span>Lelah</span>
+        </div>
+        <p class="status-note">Berdasarkan sesi terakhir: <strong>Tenang</strong> (confidence 0.87)</p>
+      </div>
+
+      <!-- Rekomendasi Sesi -->
+      <div class="card recommend-card">
+        <h3>Rekomendasi Sesi</h3>
+        <div class="recommend-content">
+          <div class="recommend-image" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=400')"></div>
+          <div class="recommend-info">
+            <h4>Hutan Dipterokarpa</h4>
+            <p>⏱ 12 menit · 🎯 Level: Sedang</p>
+            <p class="recommend-desc">Kanopi tinggi, cahaya tersaring, suara rangkong.</p>
+            <button class="btn-primary" onclick="startSession('dipterokarpa')">Mulai Sesi</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Mingguan -->
+      <div class="card progress-card">
+        <h3>Progres Mingguan</h3>
+        <div class="progress-bar-container">
+          <div class="progress-bar" style="width: 57%"></div>
+        </div>
+        <p>4 dari 7 sesi selesai</p>
+        <div class="wellness-score">
+          <span>Skor Kesejahteraan</span>
+          <strong>72/100</strong>
+        </div>
+      </div>
+
+      <!-- Menu Bawah -->
+      <div class="bottom-nav">
+        <button class="nav-btn active" onclick="showScreen('dashboard')">🏠 Home</button>
+        <button class="nav-btn" onclick="showScreen('session')">🌲 Sesi</button>
+        <button class="nav-btn" onclick="showScreen('progress')">📊 Progres</button>
+        <button class="nav-btn" onclick="showScreen('settings')">⚙️ Atur</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- ========== SESI VR (MOCKUP) ========== -->
+  <section id="screen-session" class="screen">
+    <div class="session-container">
+      <div class="session-header">
+        <button class="btn-back" onclick="showScreen('dashboard')">← Kembali</button>
+        <h3 id="session-title">Sesi Hutan</h3>
+      </div>
+
+      <!-- Pilih Hutan -->
+      <div id="session-picker">
+        <p>Pilih hutan tropis Indonesia:</p>
+        <div class="forest-grid">
+          <div class="forest-option" onclick="selectForest('dipterokarpa', 'Hutan Dipterokarpa')">
+            <div class="forest-thumb" style="background-image:url('https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=300')"></div>
+            <span>Dipterokarpa</span>
+          </div>
+          <div class="forest-option" onclick="selectForest('bambu', 'Hutan Bambu')">
+            <div class="forest-thumb" style="background-image:url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=300')"></div>
+            <span>Bambu</span>
+          </div>
+          <div class="forest-option" onclick="selectForest('mangrove', 'Hutan Mangrove')">
+            <div class="forest-thumb" style="background-image:url('https://images.unsplash.com/photo-1518495973542-4542c06a5843?w=300')"></div>
+            <span>Mangrove</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sesi Imersif -->
+      <div id="session-active" class="hidden">
+        <div class="vr-view" id="vr-view">
+          <div class="vr-overlay">
+            <div class="vr-timer" id="vr-timer">12:00</div>
+            <div class="vr-affective">
+              <span class="affective-label" id="affective-label">Tenang</span>
+              <div class="affective-bar">
+                <div class="affective-fill" id="affective-fill" style="width: 70%"></div>
+              </div>
+            </div>
+          </div>
+          <div class="vr-controls">
+            <button class="vr-btn" onclick="pauseSession()">⏸ Jeda</button>
+            <button class="vr-btn" onclick="endSession()">⏹ Selesai</button>
+          </div>
+        </div>
+        <div class="sensor-panel">
+          <h4>Pembacaan Sensor</h4>
+          <div class="sensor-row"><span>❤️ Detak Jantung</span><strong id="bpm-value">78 bpm</strong></div>
+          <div class="sensor-row"><span>💧 GSR</span><strong id="gsr-value">4.2 μS</strong></div>
+          <div class="sensor-row"><span>🧠 Status Afektif</span><strong id="affective-value">Tenang (0.87)</strong></div>
+        </div>
+      </div>
+
+      <!-- Feedback Selesai -->
+      <div id="session-feedback" class="hidden">
+        <h2>Sesi Selesai 🌿</h2>
+        <p>Terima kasih telah merawat jiwamu bersama hutan.</p>
+        <div class="feedback-stats">
+          <div class="stat"><strong>12:00</strong><span>Durasi</span></div>
+          <div class="stat"><strong>Tenang</strong><span>Status Akhir</span></div>
+          <div class="stat"><strong>+8</strong><span>Skor Kesejahteraan</span></div>
+        </div>
+        <button class="btn-primary" onclick="showScreen('dashboard')">Kembali ke Dashboard</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROGRESS & REPORT ========== -->
+  <section id="screen-progress" class="screen">
+    <header class="app-header">
+      <button class="btn-back" onclick="showScreen('dashboard')">← Kembali</button>
+      <h3>Progres & Laporan</h3>
+    </header>
+    <main class="progress-main">
+      <div class="card">
+        <h3>Tren Afektif 7 Hari</h3>
+        <div class="chart-container">
+          <canvas id="affective-chart" width="400" height="200"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Riwayat Sesi</h3>
+        <ul class="history-list">
+          <li><span>✅ 12 menit · Hutan Bambu</span><span>Hari ini</span></li>
+          <li><span>✅ 10 menit · Hutan Mangrove</span><span>Kemarin</span></li>
+          <li><span>✅ 12 menit · Dipterokarpa</span><span>2 hari lalu</span></li>
+          <li><span>⏸ 5 menit · Hutan Bambu</span><span>3 hari lalu</span></li>
+        </ul>
+      </div>
+      <button class="btn-secondary">📄 Ekspor PDF</button>
+    </main>
+  </section>
+
+  <!-- ========== PENGATURAN ========== -->
+  <section id="screen-settings" class="screen">
+    <header class="app-header">
+      <button class="btn-back" onclick="showScreen('dashboard')">← Kembali</button>
+      <h3>Pengaturan</h3>
+    </header>
+    <main class="settings-main">
+      <div class="card">
+        <h3>Profil</h3>
+        <p><strong>Nama:</strong> <span id="settings-nama">—</span></p>
+        <p><strong>Usia:</strong> <span id="settings-usia">—</span></p>
+      </div>
+      <div class="card">
+        <h3>Privasi Data</h3>
+        <label class="toggle-row">
+          <span>Proses data fisiologis on-device</span>
+          <input type="checkbox" checked />
+        </label>
+        <label class="toggle-row">
+          <span>Kirim label afektif ke cloud</span>
+          <input type="checkbox" />
+        </label>
+      </div>
+      <div class="card">
+        <h3>Notifikasi</h3>
+        <label class="toggle-row">
+          <span>Pengingat sesi harian</span>
+          <input type="checkbox" checked />
+        </label>
+      </div>
+    </main>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
